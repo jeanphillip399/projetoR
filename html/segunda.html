@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segunda</title>
+</head>
+<body>
+    <div id="pagina">
+    <br>
+    <label for="">For:</label>
+    <div contenteditable="true" class="atrib" id="forc"></div>
+    <br>
+    <label for="">Des:</label>
+    <div contenteditable="true" class="atrib" id="des"></div>
+    <br>
+    <label for="">Const:</label>
+    <div contenteditable="true" class="atrib" id="consti"></div>
+    <br>
+    <h2>Inventario:</h2>
+    <div id="inventario" contenteditable="true"></div>
+    <br>
+    <button onclick="salvar()">Salvar</button>
+    <br>
+    </div>
+    <script>
+        //CÓDIGO QUANDO A TELA É CARREGADA:
+        document.addEventListener('DOMContentLoaded', function(){
+            const pagina = document.getElementById('pagina')
+            const titulo = document.createElement('h1')
+            //Pega o nome no localStorage do login
+            const nome = localStorage.getItem("nome")||""
+            titulo.textContent = 'Seja bem vindo '+ `${nome}!!!`
+            pagina.appendChild(titulo)
+
+            const forc = document.getElementById("forc")
+            const des = document.getElementById("des")
+            const consti = document.getElementById("consti")
+            const inventario = document.getElementById("inventario")
+            const corpo = {
+                nome: nome
+            }
+            //MANDANDO REQUISIÇÃO PARA BUSCAR OS NOMES REGISTRADOS
+            fetch('http://192.168.42.76:3300/lista',{
+                method:'POST',
+                headers:{
+                    'Content-type':'application/json'
+                },
+                body: JSON.stringify(corpo)
+            })
+            .then(response => response.json())
+            .then(data=>{
+                forc.innerHTML = data.forc
+                des.innerHTML = data.des
+                consti.innerHTML = data.consti
+                inventario.innerHTML = data.inventario
+                localStorage.setItem("nome", nome)
+            })
+                
+        })
+        //FUNÇÃO QUANDO APERTAR NO BOTAO SALVAR
+        function salvar(){
+            const forc = document.getElementById('forc').innerHTML
+            const des = document.getElementById('des').innerHTML
+            const consti = document.getElementById('consti').innerHTML
+            const inventario = document.getElementById('inventario').innerHTML
+            const nome = localStorage.getItem("nome")
+            const query = {
+                forc:forc,
+                des: des,
+                consti: consti,
+                inventario: inventario,
+                nome: nome
+            }
+            fetch('http://192.168.42.76:3300/salvar',{
+                method:'POST',
+                headers:{
+                    'Content-type':'application/json'
+                },
+                body: JSON.stringify(query)
+            })
+            .then(response=> response.json())
+            .then(data=>{
+                localStorage.setItem("forc", data.forc)
+                localStorage.setItem("des", data.des)
+                localStorage.setItem("consti", data.consti)
+                localStorage.setItem("inventario", data.inventario)
+            })
+        }
+    </script>
+    <style>
+        h1{
+            position: absolute;
+            top: 0;
+            color: white;
+        }
+            h2{
+            color: white;
+        }
+        p{
+            color: white;
+        }
+        label{
+            color: white;
+        }
+        .atrib{
+            border-radius: 10px;
+            border: none;
+            width: 20vw;
+            background-color: white;
+        }
+        button{
+            border-radius: 10px;
+            border: none
+        }
+        #inventario{
+            text-align: left;
+            border-radius: 10px;
+            background-color: white;
+            height: 200px;
+            width: 50vw;
+        }
+        body{
+            height: 100vh;
+            width: 100vw;
+            margin: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to left, rgb(47, 2, 65), rgb(111, 49, 136));
+        }
+        #pagina{
+            padding: top;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 50vw;
+            height: 100vh;
+        }
+    </style>
+</body>
+</html>     

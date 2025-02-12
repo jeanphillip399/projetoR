@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login:</h1>
+    <br>
+    <p>Insira os dados do seu personagem:</p>
+    <br>
+    <label for="">Nome:</label>
+    <input type="text" id="nome" class="barra">
+    <br>
+    <br>
+    <label for="">Senha:</label>
+    <input type="password" id="senha" class="barra">
+    <br>
+    <br>
+    <button onclick="logar()">Entrar</button>
+    <br>
+    <div id="resul"></div>
+    <style>
+        h1{
+            color: white;
+        }
+        p{
+            color: white;
+        }
+        label{
+            color: white;
+        }
+        .barra{
+            border-radius: 10px;
+            border: none
+        }
+        button{
+            border-radius: 10px;
+            border: none
+        }
+        body{
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to left, rgb(47, 2, 65), rgb(111, 49, 136));
+        }
+    </style>
+    <script>
+        function logar(){
+            const nome = document.getElementById('nome').value
+            const senha = document.getElementById('senha').value
+            const resul = document.getElementById('resul')
+            const query = {
+                nome: nome,
+                senha: senha
+            }
+            resul.innerHTML = ""
+            fetch('http://192.168.42.76:3300/login', {
+                method:'POST',
+                headers: {
+                    'Content-type':'application/json'
+                },
+                body: JSON.stringify(query)
+            })
+            .then(response => response.json())
+            .then(data=>{
+                const item = document.createElement('p')
+                if(data.erro){
+                    item.textContent = 'Erro com o usuário ou senha'
+                }
+                if(data.diretorio){
+                    localStorage.setItem("nome", nome)
+                    window.location.href = 'http://192.168.42.76:3300' + data.diretorio
+                }
+                resul.appendChild(item)
+            })
+            .catch(error=>console.error('Erro com a resposta do fetch'))
+        }
+    </script>
+</body>
+</html>

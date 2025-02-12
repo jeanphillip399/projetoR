@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static(path.join(__dirname, "html")))
 
-app.listen(port,'192.168.42.76', ()=>{
+app.listen(port, ()=>{
     console.log('Rodando na porta 3300')
 })
 app.get('/', (req,res)=>{

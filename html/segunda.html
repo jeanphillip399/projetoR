@@ -41,7 +41,7 @@
                 nome: nome
             }
             //MANDANDO REQUISIÇÃO PARA BUSCAR OS NOMES REGISTRADOS
-            fetch('http://192.168.42.76:3300/lista',{
+            fetch('https://projetor.onrender.com/lista',{
                 method:'POST',
                 headers:{
                     'Content-type':'application/json'
@@ -72,7 +72,7 @@
                 inventario: inventario,
                 nome: nome
             }
-            fetch('http://192.168.42.76:3300/salvar',{
+            fetch('https://projetor.onrender.com/salvar',{
                 method:'POST',
                 headers:{
                     'Content-type':'application/json'
